@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        					http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<context:component-scan base-package="com.tiandu.quartz" />
+
+	<!-- For times when you need more complex processing, passing data to the scheduled job -->
+	<bean name="complexJobDetail" 	class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="com.tiandu.quartz.ScheduledJob" />
+		<property name="jobDataMap">
+			<map>
+				<entry key="campaignCount" value-ref="campaignCount"/>
+				<entry key="levelOneRegionUserCount" value-ref="levelOneRegionUserCount"/>
+			</map>
+		</property>
+		<property name="durability" value="true"/>
+	</bean>
+
+	<bean id="cronTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="complexJobDetail"/>
+		<property name="cronExpression" value="0 0 8 ? * *"/>
+	</bean>
+	
+	<!-- 等级 -->
+	<bean name="userLevelComplexJobDetail" 	class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="com.tiandu.quartz.UserLevelScheduledJob" />
+		<property name="jobDataMap">
+			<map>
+				<entry key="userLevelFlush" value-ref="userLevelFlush"/>
+			</map>
+		</property>
+		<property name="durability" value="true"/>
+	</bean>
+
+	<bean id="userLevelCronTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="userLevelComplexJobDetail"/>
+		<property name="cronExpression" value="0 48 16 ? * *"/>
+	</bean>
+
+	<!-- Scheduler factory bean to glue together jobDetails and triggers to Configure Quartz Scheduler -->
+	<bean  class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="jobDetails">
+			<list>
+				<ref bean="complexJobDetail" />
+				<ref bean="userLevelComplexJobDetail" />
+				<ref bean="orderReciptJobDetail" />
+			</list>
+		</property>
+
+		<property name="triggers">
+			<list>
+				<ref bean="cronTrigger" />
+				<ref bean="userLevelCronTrigger" />
+				<ref bean="orderReciptTrigger" />
+				<ref bean="orderCompleteTrigger" />
+				<ref bean="orderCancleTrigger" />
+				<ref bean="seckillProductTrigger" />
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 订单定时器 -->
+	<!-- 订单自动收货定时任务 -->
+	<bean name="orderReciptJobDetail" 	class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="com.tiandu.quartz.OrderReceiptScheduledJob" />
+		<property name="jobDataMap">
+			<map>
+				<entry key="tdOrderService" value-ref="tdOrderService"/>
+			</map>
+		</property>
+		<property name="durability" value="true"/>
+	</bean>
+	<bean id="orderReciptTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="orderReciptJobDetail"/>
+		<property name="cronExpression" value="0 0 5 ? * *"/>
+	</bean>
+	<!-- 订单自动完成定时任务 -->
+	<bean name="orderCompleteJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="com.tiandu.quartz.OrderCompleteScheduledJob" />
+		<property name="jobDataMap">
+			<map>
+				<entry key="tdOrderService" value-ref="tdOrderService"/>
+			</map>
+		</property>
+		<property name="durability" value="true"/>
+	</bean>
+	<bean id="orderCompleteTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="orderCompleteJobDetail"/>
+		<property name="cronExpression" value="0 0 6 ? * *"/>
+	</bean>
+	
+	<!-- 未支付订单超时自动取消定时任务 -->
+	<bean name="orderCancelJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="com.tiandu.quartz.OrderCancelScheduledJob" />
+		<property name="jobDataMap">
+			<map>
+				<entry key="tdOrderService" value-ref="tdOrderService"/>
+			</map>
+		</property>
+		<property name="durability" value="true"/>
+	</bean>
+	<bean id="orderCancleTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="orderCancelJobDetail"/>
+		<property name="cronExpression" value="0 0 4 ? * *"/>
+	</bean>
+	
+	<!-- 预售秒杀到时间自动下架 -->
+	<bean name="seckillProductJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="com.tiandu.quartz.SeckillProductScheduledJob" />
+		<property name="jobDataMap">
+			<map>
+				<entry key="tdProductService" value-ref="tdProductService"/>
+			</map>
+		</property>
+		<property name="durability" value="true"/>
+	</bean>
+	<bean id="seckillProductTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="seckillProductJobDetail"/>
+		<property name="cronExpression" value="0 * * ? * *"/>
+	</bean>
+
+</beans>

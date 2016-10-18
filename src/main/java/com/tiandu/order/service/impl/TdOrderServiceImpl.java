@@ -307,9 +307,9 @@ public class TdOrderServiceImpl implements TdOrderService{
     	alog.setRelation(null);
 		tdUserAccountService.addAmount(account, alog);
 		//已分润订单进行回扣操作
-		/*if(order.getBenefited().equals(2)&&BigDecimal.ZERO.compareTo(order.getBenefitAmount())<0){
+		if(order.getBenefited().equals(2)&&BigDecimal.ZERO.compareTo(order.getBenefitAmount())<0){
 			backBenefitOrder(order);
-		}*/
+		}
 		result.setFlag(true);
 		return result;
 	}
@@ -451,7 +451,7 @@ public class TdOrderServiceImpl implements TdOrderService{
 		}
 		
 		//分润开始
-		//this.benefitOrder(order);
+		this.benefitOrder(order);
 		
 		//货款给到供应商钱包里
 		this.castCash(order);
@@ -511,7 +511,7 @@ public class TdOrderServiceImpl implements TdOrderService{
 		}
 		
 		//分润
-//		this.benefitOrder(order);
+		this.benefitOrder(order);
 		logger.error("completeOrder  end: orderno= "+order.getOrderNo());
 		
 		//货款给到供应商钱包里

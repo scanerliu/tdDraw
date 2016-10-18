@@ -1841,16 +1841,11 @@ public class CUserController extends BaseController {
 	@RequestMapping("/supplierApply")
 	public String supplierApply(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) {
 		TdUser currentUser = this.getCurrentUser();
-		TdUserSupplierSearchCriteria sc = new TdUserSupplierSearchCriteria();
-		sc.setFlag(false);
-		sc.setUserId(currentUser.getUid());
-		List<TdUserSupplier> userSupplierList = tdUserSupplierService.findBySearchCriteria(sc);
-		if(userSupplierList != null && userSupplierList.size() > 1){
-			logger.error("供应商资质认证数据出错：供应商资质认证数据不唯一");
-		}
-		if(userSupplierList != null && userSupplierList.size() > 0){
-			modelMap.addAttribute("userSupplier", userSupplierList.get(0));
-			String[] imgList = userSupplierList.get(0).getImages().split(":");
+		currentUser.getUid();
+		TdUserSupplier userSupplier = tdUserSupplierService.findOne(currentUser.getUid());
+		if(null!=userSupplier){
+			modelMap.addAttribute("userSupplier", userSupplier);
+			String[] imgList = userSupplier.getImages().split(":");
 			modelMap.addAttribute("imgList", imgList);
 		}
 		// 系统配置
@@ -1868,16 +1863,19 @@ public class CUserController extends BaseController {
 		try{
 			Date now = new Date();
 			TdUser currentUser = this.getCurrentUser();
-			if(null==userSupplier.getId()){
+			userSupplier.setUid(currentUser.getUid());
+			TdUserSupplier presuppiler = tdUserSupplierService.findOne(currentUser.getUid());
+			if(null==presuppiler){
 				userSupplier.setCreateTime(now);
-				userSupplier.setUid(currentUser.getUid());
-			}else{
-				TdUserSupplier presuppiler = tdUserSupplierService.findOne(userSupplier.getId());
-				if(null==presuppiler || !presuppiler.getUid().equals(currentUser.getUid())){
-					res.put("code", "0");
-					res.put("msg", "资质认证更新失败：未找到数据！");
-					return res;
-				}
+				userSupplier.setLevel(5);
+				userSupplier.setRecommend(0);
+				userSupplier.setStatus(Byte.valueOf("1"));
+			}
+			//检查供应商名称重复
+			TdUserSupplier prsuppiler = tdUserSupplierService.findByName(userSupplier.getPname());
+			if(null!=prsuppiler&& !prsuppiler.getUid().equals(currentUser.getUid())){
+				res.put("code", "0");
+				res.put("msg", "资质上传失败：店铺名称已经存在！");
 			}
 			userSupplier.setUpdateTime(now);
 			userSupplier.setUpdateBy(currentUser.getUid());
@@ -1898,7 +1896,7 @@ public class CUserController extends BaseController {
 		} catch(Exception e){
 			res.put("code", "0");
 			res.put("msg", "资质上传失败！");
-			logger.error("供应商资质上传保存失败！");
+			logger.error("供应商资质上传保存失败:"+e.getMessage());
 			return res;
 		}
 	}

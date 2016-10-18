@@ -17,4 +17,5 @@ public interface TdUserSupplierService {
 	public List<TdUserSupplier> findBySearchCriteria(TdUserSupplierSearchCriteria sc);
 	public Integer save(TdUserSupplier tdUserSupplier);
 	public Integer delete(Integer id);
+	public TdUserSupplier findByName(String pname);
 }

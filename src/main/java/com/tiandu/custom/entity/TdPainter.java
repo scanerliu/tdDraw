@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class TdPainter {
     private Integer pid;
+    private Integer ptype;
 
     private String pname;
 
@@ -35,7 +36,15 @@ public class TdPainter {
         this.pid = pid;
     }
 
-    public String getPname() {
+    public Integer getPtype() {
+		return ptype;
+	}
+
+	public void setPtype(Integer ptype) {
+		this.ptype = ptype;
+	}
+
+	public String getPname() {
         return pname;
     }
 

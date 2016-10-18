@@ -20,4 +20,6 @@ public interface TdUserSupplierMapper {
     
     Integer countByCriteria(TdUserSupplierSearchCriteria sc);
     public List<TdUserSupplier> findBySearchCriteria(TdUserSupplierSearchCriteria sc);
+
+	TdUserSupplier findByName(String pname);
 }

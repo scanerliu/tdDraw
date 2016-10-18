@@ -66,7 +66,8 @@ public class TdUserSupplierServiceImpl implements TdUserSupplierService {
 	@Override
 	public Integer save(TdUserSupplier userSupplier) {
 		if(null!=userSupplier){
-			if(null!=userSupplier.getId()){//更新
+			TdUserSupplier presuppiler = this.findOne(userSupplier.getUid());
+			if(null!=presuppiler){//更新
 				return userSupplierMapper.updateByPrimaryKeySelective(userSupplier);
 			}else{
 				return userSupplierMapper.insert(userSupplier);
@@ -78,6 +79,11 @@ public class TdUserSupplierServiceImpl implements TdUserSupplierService {
 	@Override
 	public Integer delete(Integer id) {
 		return userSupplierMapper.deleteByPrimaryKey(id);
+	}
+
+	@Override
+	public TdUserSupplier findByName(String pname) {
+		return userSupplierMapper.findByName(pname);
 	}
 
 }

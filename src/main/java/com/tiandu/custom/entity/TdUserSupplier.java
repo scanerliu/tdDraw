@@ -4,8 +4,6 @@ import java.util.Date;
 
 public class TdUserSupplier {
 
-	private Integer id;
-
 	private Integer uid;
 
 	private TdUser user;
@@ -25,16 +23,18 @@ public class TdUserSupplier {
 	private Date updateTime;
 
 	private Integer updateBy;
+	
+	private String pname;
+
+    private String pdesc;
+
+    private String pimg;
+    
+    private Integer level;
+
+    private Integer recommend;
 
 	private TdUser updatePerson;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	public Integer getUid() {
 		return uid;
@@ -124,6 +124,46 @@ public class TdUserSupplier {
 		this.updatePerson = updatePerson;
 	}
 
+	public String getPname() {
+		return pname;
+	}
+
+	public void setPname(String pname) {
+		this.pname = pname;
+	}
+
+	public String getPdesc() {
+		return pdesc;
+	}
+
+	public void setPdesc(String pdesc) {
+		this.pdesc = pdesc;
+	}
+
+	public String getPimg() {
+		return pimg;
+	}
+
+	public void setPimg(String pimg) {
+		this.pimg = pimg;
+	}
+
+	public Integer getLevel() {
+		return level;
+	}
+
+	public void setLevel(Integer level) {
+		this.level = level;
+	}
+
+	public Integer getRecommend() {
+		return recommend;
+	}
+
+	public void setRecommend(Integer recommend) {
+		this.recommend = recommend;
+	}
+
 	public String getSupplierTypeStr() {
 		if (this.getSupplierType().equals(Byte.valueOf("1"))) {
 			return "个人";
@@ -132,13 +172,15 @@ public class TdUserSupplier {
 		}
 	}
 
-	public String getStatusStr() {
+	public String getStatusStr() {//状态：1未审核，2-审核通过，3-审核不通过，4-锁定
 		if (this.getStatus().equals(Byte.valueOf("1"))) {
 			return "未审核";
 		} else if (this.getStatus().equals(Byte.valueOf("2"))) {
 			return "通过";
+		} else if (this.getStatus().equals(Byte.valueOf("3"))) {
+			return "审核不通过";
 		} else {
-			return "未通过";
+			return "锁定";
 		}
 
 	}

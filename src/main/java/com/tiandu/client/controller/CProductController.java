@@ -27,8 +27,10 @@ import com.tiandu.common.controller.BaseController;
 import com.tiandu.common.utils.ConstantsUtils;
 import com.tiandu.custom.entity.TdUser;
 import com.tiandu.custom.entity.TdUserCollection;
+import com.tiandu.custom.entity.TdUserSupplier;
 import com.tiandu.custom.search.TdUserCollectionCriteria;
 import com.tiandu.custom.service.TdUserCollectionService;
+import com.tiandu.custom.service.TdUserSupplierService;
 import com.tiandu.district.entity.TdDistrict;
 import com.tiandu.district.service.TdDistrictService;
 import com.tiandu.menu.search.TdProductMenuSearchCriteria;
@@ -118,6 +120,9 @@ public class CProductController extends BaseController {
 	
 	@Autowired
 	private TdProductMenuService tdProductMenuService;
+	
+	@Autowired
+	private TdUserSupplierService tdUserSupplierService;
 	
 	/*
 	 * 商品列表页
@@ -263,17 +268,9 @@ public class CProductController extends BaseController {
 		String productjson = tdProductService.fromProductSkutoProductJsonString(skuList);
 		//商品图片
 		List<TdProductAttachment> attachmentList = tdProductAttachmentService.findByProductId(id);
-		//获取服务地区
-		TdUser currUser = this.getCurrentUser();
-		TdDistrict region = null;
-		if(null!=currUser && null!=currUser.getUregionId()){
-			region = tdDistrictService.findOne(currUser.getUregionId());
-		}
-		if(null==region){
-			//默认重庆江北区
-			region = tdDistrictService.findOne(349);
-		}
-		map.addAttribute("region", region);
+		//获取店铺信息
+		TdUserSupplier supplier = tdUserSupplierService.findOne(product.getUid());
+		map.addAttribute("supplier", supplier);
 		//获取商品类型
 		TdProductType productType = tdProductTypeService.findOne(product.getTypeId());
 		map.addAttribute("productType", productType);

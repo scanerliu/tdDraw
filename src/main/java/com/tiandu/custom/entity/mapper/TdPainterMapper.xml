@@ -3,6 +3,7 @@
 <mapper namespace="com.tiandu.custom.entity.mapper.TdPainterMapper" >
   <resultMap id="BaseResultMap" type="com.tiandu.custom.entity.TdPainter" >
     <id column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="ptype" property="ptype" jdbcType="INTEGER" />
     <result column="pname" property="pname" jdbcType="VARCHAR" />
     <result column="pdesc" property="pdesc" jdbcType="VARCHAR" />
     <result column="pimg" property="pimg" jdbcType="VARCHAR" />
@@ -18,7 +19,7 @@
     <result column="pdescript" property="pdescript" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    pid, pname, pdesc, pimg, update_time, update_by, level, recommend, create_time, status, 
+    pid, ptype, pname, pdesc, pimg, update_time, update_by, level, recommend, create_time, status, 
     remark
   </sql>
   <sql id="Blob_Column_List" >
@@ -79,11 +80,11 @@
     <selectKey resultType="java.lang.Integer" keyProperty="pid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into td_painter (pname, pdesc, pimg, 
+    insert into td_painter (ptype, pname, pdesc, pimg, 
       update_time, update_by, level, 
       recommend, create_time, status, 
       remark, pdescript)
-    values (#{pname,jdbcType=VARCHAR}, #{pdesc,jdbcType=VARCHAR}, #{pimg,jdbcType=VARCHAR}, 
+    values (#{ptype,jdbcType=INTEGER}, #{pname,jdbcType=VARCHAR}, #{pdesc,jdbcType=VARCHAR}, #{pimg,jdbcType=VARCHAR}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, #{level,jdbcType=INTEGER}, 
       #{recommend,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
       #{remark,jdbcType=VARCHAR}, #{pdescript,jdbcType=LONGVARCHAR})
@@ -94,6 +95,9 @@
     </selectKey>
     insert into td_painter
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ptype != null" >
+        ptype,
+      </if>
       <if test="pname != null" >
         pname,
       </if>
@@ -129,6 +133,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ptype != null" >
+        #{ptype,jdbcType=INTEGER},
+      </if>
       <if test="pname != null" >
         #{pname,jdbcType=VARCHAR},
       </if>
@@ -167,6 +174,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.tiandu.custom.entity.TdPainter" >
     update td_painter
     <set >
+      <if test="ptype != null" >
+        ptype = #{ptype,jdbcType=INTEGER},
+      </if>
       <if test="pname != null" >
         pname = #{pname,jdbcType=VARCHAR},
       </if>
@@ -205,7 +215,8 @@
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.tiandu.custom.entity.TdPainter" >
     update td_painter
-    set pname = #{pname,jdbcType=VARCHAR},
+    set ptype = #{ptype,jdbcType=INTEGER},
+      pname = #{pname,jdbcType=VARCHAR},
       pdesc = #{pdesc,jdbcType=VARCHAR},
       pimg = #{pimg,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
@@ -220,7 +231,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.tiandu.custom.entity.TdPainter" >
     update td_painter
-    set pname = #{pname,jdbcType=VARCHAR},
+    set  ptype = #{ptype,jdbcType=INTEGER},
+      pname = #{pname,jdbcType=VARCHAR},
       pdesc = #{pdesc,jdbcType=VARCHAR},
       pimg = #{pimg,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

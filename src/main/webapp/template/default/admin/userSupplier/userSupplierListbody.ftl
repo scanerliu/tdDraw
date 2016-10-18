@@ -13,7 +13,7 @@
 <table width="100%" cellspacing="0">
 <thead>
 <tr>
-	<th>ID</th>
+	<th>UID</th>
 	<th align="center">用户</th>
 	<th align="center">资质类型</th>
 	<th align="center">状态</th>
@@ -27,7 +27,7 @@
 <#if userSupplierList??>
 <#list userSupplierList as userSupplier>
     <tr>
-        <td align="center">${userSupplier.id?c}</td>
+        <td align="center">${userSupplier.uid?c}</td>
         <td align="center">${userSupplier.user.uname!''}</td>
         <td align="center">${userSupplier.supplierTypeStr!''}</td>
         <td align="center">${userSupplier.statusStr!''}</td>
@@ -35,7 +35,7 @@
         <td align="center"><#if userSupplier.updateTime??>${userSupplier.updateTime?string('yyyy-MM-dd HH:mm:ss')!''}</#if></td>
         <td align="center"><#if userSupplier.updatePerson??>${userSupplier.updatePerson.uname!''}</#if></td>
         <td align="center">
-            <a class="J_showdialog" href="javascript:;" onclick="editUserSupplier(${userSupplier.id?c})">详情</a>
+            <a class="J_showdialog" href="javascript:;" onclick="editUserSupplier(${userSupplier.uid?c})">详情</a>
         </td>
     </tr>
 </#list>

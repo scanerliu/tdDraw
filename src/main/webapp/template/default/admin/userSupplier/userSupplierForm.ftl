@@ -11,15 +11,15 @@
         <td>${tdUserSupplier.user.uname!''}</td>
     </tr>
 	<tr>
+        <th>店铺名称：</th>
+        <td>${tdUserSupplier.pname!''}</td>
+    </tr>
+	<tr>
         <th width="150">资质类型：</th>
         <td>${tdUserSupplier.supplierTypeStr!''}</td>
     </tr>
     <tr>
-        <th width="150">申请说明：</th>
-        <td>${tdUserSupplier.note!''}</td>
-    </tr>
-    <tr>
-        <th width="150">图片：</th>
+        <th width="150">资质图片：</th>
         <td>
     		<#if imgList??>
     			<#list imgList as img>
@@ -27,6 +27,16 @@
 	    			<img width='200' height='200' src="${app.basePath}${img!''}"/>
 				</#list>
 			</#if>
+        </td>
+    </tr>
+    <tr>
+        <th width="150">简介：</th>
+        <td>${tdUserSupplier.note!''}</td>
+    </tr>
+    <tr>
+        <th width="150">详细介绍：</th>
+        <td>
+        	<textarea rows='4' cols='80'>${tdUserSupplier.pdesc!''}</textarea>
         </td>
     </tr>
     <tr>

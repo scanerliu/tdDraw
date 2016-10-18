@@ -100,7 +100,7 @@ public class UserSupplierController extends BaseController {
 		Map<String,String> res = new HashMap<String,String>(); 
 		if(null!=userSupplier){
 			try {
-				TdUserSupplier tus = tdUserSupplierService.findOne(userSupplier.getId());
+				TdUserSupplier tus = tdUserSupplierService.findOne(userSupplier.getUid());
 				tus.setUpdateBy(this.getCurrentUser().getUid());
 				tus.setUpdateTime(new Date());
 				tus.setNote(userSupplier.getNote());

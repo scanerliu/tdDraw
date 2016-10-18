@@ -127,7 +127,7 @@
 	                <div class="program1 border-bottom">
 	                    <span>服&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;务：</span>
 	
-	                    <p>由<strong><#if supplier??><a href="${app.basePath}/seller/${supplier.uid!'0'}">${supplier.pname!''}</a></#if></strong> 发货并负责售后服务。</p>
+	                    <p>由<strong><#if supplier??><#if supplier.uid gt 1><a href="${app.basePath}/seller/${supplier.uid!'0'}" title="查看店家">${supplier.pname!''}</a><#else><a href="javascript:;">${supplier.pname!''}</a></#if></#if></strong> 发货并负责售后服务。</p>
 	
 	                </div>
 	                <#if taList?? && taList?size gt 0>

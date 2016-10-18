@@ -2018,7 +2018,7 @@ public class CUserController extends BaseController {
 		}else{
 			TdProduct product = new TdProduct();
 			if(null!=ktype && ktype.equals(2)){
-				product.setKind(Byte.valueOf("3"));
+				product.setKind(Byte.valueOf("5"));
 			}
 			map.addAttribute("tdProduct", product);
 		}

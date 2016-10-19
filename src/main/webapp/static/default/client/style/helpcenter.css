@@ -252,5 +252,85 @@
       padding: 30px 0;
       width: 100%;
       line-height: 26px; }
+.econtent{
+		padding:0px 10px;
+	}
+	.econtent li {
+	    border-top: 1px solid #eaeaea;
+	    margin: 0 0 20px;
+	    padding: 20px 0 0;
+	}
+	.econtent li .img130_90 {
+	    border: 1px solid #eaeaea;
+	    display: inline;
+	    float: left;
+	    height: 90px;
+	    margin-right: 13px;
+	    width: 130px;
+	}
+	.econtent li .tw_con {
+	    overflow: hidden;
+	}
+	.econtent li .newstitle {
+	    color: #1e6d9b;
+	    float: left;
+	    font-size: 16px;
+	    font-weight: bold;
+	}
+	.econtent li .titlename::after {
+	    clear: both;
+	    content: "";
+	    display: block;
+	    visibility: hidden;
+	}
+	.econtent .date_browse {
+	    color: #949494;
+	    display: block;
+	    padding: 10px 0 5px;
+	}
+	.econtent .twinfocon {
+	    height: 35px;
+	    overflow: hidden;
+	    position: relative;
+	}
+	.econtent .boxtm {
+	    background: rgba(0, 0, 0, 0) url("../images/topic-mask.png") no-repeat scroll left top;
+	    bottom: 0;
+	    height: 20px;
+	    position: absolute;
+	    right: 0;
+	    width: 158px;
+	}
+	
+	.eicontent{
+		padding:5px 10px;
+	}
+	
+.eicontent .titlebig {
+    color: #1a2b38;
+    font-size: 22px;
+    margin: 0;
+    padding: 10px 0 10px;
+    text-align: center;
+}
 
+.eicontent .newsinfo {
+    color: #585858;
+    font-size: 12px;
+    margin-bottom: 10px;
+    padding: 0 0 10px;
+    text-align: center;
+}
+
+.eicontent .newsinfo span {
+    color: #949494;
+    padding-right: 10px;
+}
+
+.eicontent .newscon {
+    color: #585858;
+    font-size: 16px;
+    line-height: 1.8;
+    margin: 10px 0 30px;
+}
 /*# sourceMappingURL=helpcenter.css.map */

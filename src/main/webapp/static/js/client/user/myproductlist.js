@@ -438,3 +438,29 @@ function batchOperCallback(data){
 	  alert('操作失败!');
 	}
 }
+
+//上下架操作
+function goOnshelf(pid,optype){
+	var oparr = [1,2];
+	var ids = pid;
+	if(ids==""){
+		alert('请先勾选要操作的商品!');
+		return ;
+	}
+	if($.inArray(optype, oparr)<0){
+		alert('操作不合规范!');
+		return ;
+	}
+	var op = "";
+	if(optype==1){
+		op = "上架";
+	}else if(optype==2){
+		op = "下架";
+	}
+	if(confirm("确定要"+op+"该商品？")){
+		var url = basePath+"/user/batchoperproducts";
+		var postData = {"type":optype,"ids":ids};
+		openwaiting();
+		$.post(url,postData,batchOperCallback,"text");
+	}
+}

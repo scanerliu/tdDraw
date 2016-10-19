@@ -23,9 +23,6 @@ public class CSellerController extends BaseController{
 	@Autowired
 	TdUserSupplierService tdUserSupplierService;
 	
-	@Autowired
-	private TdDistrictService tdDistrictService;
-	
 	@RequestMapping("/item{id}")
 	public String detail(@PathVariable Integer id,HttpServletRequest req,ModelMap map)
 	{

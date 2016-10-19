@@ -1170,6 +1170,7 @@ public class CUserController extends BaseController {
 	public String searchMyProduct(TdProductCriteria sc, HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) {
 		TdUser currentUser = this.getCurrentUser();
 		sc.setUid(currentUser.getUid());
+		sc.setKind(ConstantsUtils.PRODUCT_KIND_COMMON);
 		List<TdProduct> productList = tdProductService.findBySearchCriteria(sc);
 		modelMap.addAttribute("productList", productList);			
 		modelMap.addAttribute("sc", sc);
@@ -1598,6 +1599,7 @@ public class CUserController extends BaseController {
 				product.setSpecification(true);
 				product.setSort(0);
 				product.setStatus(Byte.valueOf("2"));
+				product.setCurrPrice(BigDecimal.ZERO);
 				//保存商品类型Tree
 				if(null!=product.getTypeId()&&product.getTypeId()>0){
 					TdProductType type = tdProductTypeService.findOneWithParents(product.getTypeId());
@@ -1632,24 +1634,50 @@ public class CUserController extends BaseController {
 				product.setQuantum(totalStock);
 				product.setSpecification(true);
 			}else{//关闭规格
-				if(null==product.getPrice()||null==product.getHighPrice()||null==product.getLowPrice()||null==product.getSupplierPrice()){
-					res.put("code", "0");
-					res.put("msg", "商品保存失败:请正确设置商品价格！");
-					return res;
+				if(product.getKind().equals(Byte.valueOf("5"))){//拍卖商品
+					if(null==product.getPrice()||null==product.getBasePrice()||null==product.getBond()||null==product.getMarketPrice()){
+						res.put("code", "0");
+						res.put("msg", "商品保存失败:请正确设置商品价格！");
+						return res;
+					}
+					if(null==product.getStartTime()||null==product.getEndTime()){
+						res.put("code", "0");
+						res.put("msg", "商品保存失败:请正确设置拍卖开始、结束时间！");
+						return res;
+					}
+					product.setSpecification(false);
+					List<TdProductSku> skuList = new ArrayList<TdProductSku>();
+					TdProductSku sku = new TdProductSku();
+					sku.setHighPrice(product.getHighPrice());
+					sku.setLowPrice(product.getLowPrice());
+					sku.setSalesPrice(product.getPrice());
+					sku.setSkuCode(product.getSkuCode());
+					sku.setMarketPrice(product.getMarketPrice());
+					sku.setSupplierPrice(product.getSupplierPrice());
+					sku.setStock(product.getQuantum());
+					sku.setSpecifications("");
+					skuList.add(sku);
+					product.setSkuList(skuList);
+				}else{
+					if(null==product.getPrice()||null==product.getHighPrice()||null==product.getLowPrice()||null==product.getSupplierPrice()){
+						res.put("code", "0");
+						res.put("msg", "商品保存失败:请正确设置商品价格！");
+						return res;
+					}
+					product.setSpecification(false);
+					List<TdProductSku> skuList = new ArrayList<TdProductSku>();
+					TdProductSku sku = new TdProductSku();
+					sku.setHighPrice(product.getHighPrice());
+					sku.setLowPrice(product.getLowPrice());
+					sku.setSalesPrice(product.getPrice());
+					sku.setSkuCode(product.getSkuCode());
+					sku.setMarketPrice(product.getMarketPrice());
+					sku.setSupplierPrice(product.getSupplierPrice());
+					sku.setStock(product.getQuantum());
+					sku.setSpecifications("");
+					skuList.add(sku);
+					product.setSkuList(skuList);
 				}
-				product.setSpecification(false);
-				List<TdProductSku> skuList = new ArrayList<TdProductSku>();
-				TdProductSku sku = new TdProductSku();
-				sku.setHighPrice(product.getHighPrice());
-				sku.setLowPrice(product.getLowPrice());
-				sku.setSalesPrice(product.getPrice());
-				sku.setSkuCode(product.getSkuCode());
-				sku.setMarketPrice(product.getMarketPrice());
-				sku.setSupplierPrice(product.getSupplierPrice());
-				sku.setStock(product.getQuantum());
-				sku.setSpecifications("");
-				skuList.add(sku);
-				product.setSkuList(skuList);
 			}
 			
 			tdProductService.save(product);
@@ -1690,37 +1718,8 @@ public class CUserController extends BaseController {
 			imgDetail.setDescription(detail);
 			imgDetail.setUpdateBy(currentUser.getUid());
 			imgDetail.setUpdateTime(now);
-			
-			// 包装配送
-			sc.setType(2);
-			TdProductDescription packdetail = tdProductDescriptionService.findByProductId(sc);
-			if(null == packdetail)
-			{
-				packdetail = new TdProductDescription();
-				packdetail.setProductId(product.getId());
-				packdetail.setType((byte) 2);
-			}
-			packdetail.setDescription(packDetail);
-			packdetail.setUpdateBy(currentUser.getUid());
-			packdetail.setUpdateTime(now);
-			
-			// 售后说明
-			sc.setType(3);
-			TdProductDescription afterSaleDetail = tdProductDescriptionService.findByProductId(sc);
-			
-			if(null == afterSaleDetail)
-			{
-				afterSaleDetail = new TdProductDescription();
-				afterSaleDetail.setProductId(product.getId());
-				afterSaleDetail.setType((byte) 3);
-			}
-			afterSaleDetail.setDescription(afterSale);
-			afterSaleDetail.setUpdateBy(currentUser.getUid());
-			afterSaleDetail.setUpdateTime(now);
-			
+						
 			tdProductDescriptionService.save(imgDetail);
-			tdProductDescriptionService.save(packdetail);
-			tdProductDescriptionService.save(afterSaleDetail);
 			
 			// 新增商品时添加统计表
 			TdProductStat stat = tdProductStatService.findOne(product.getId());
@@ -1964,11 +1963,11 @@ public class CUserController extends BaseController {
 		tsc.setStatus((byte) 1);
 		List<TdProductType> productTypeList = tdProductTypeService.findAll(tsc);
 		map.addAttribute("productTypeList", productTypeList);*/
-		
+		TdProduct product = null;
 		if(null != id && id != 0)
 		{
 			// 商品主要信息
-			TdProduct product = tdProductService.findOne(id);
+			product = tdProductService.findOne(id);
 			map.addAttribute("tdProduct", product);
 			
 			// 商品图片
@@ -2016,7 +2015,7 @@ public class CUserController extends BaseController {
 				
 			}
 		}else{
-			TdProduct product = new TdProduct();
+			product = new TdProduct();
 			if(null!=ktype && ktype.equals(2)){
 				product.setKind(Byte.valueOf("5"));
 			}
@@ -2024,11 +2023,15 @@ public class CUserController extends BaseController {
 		}
 		
 		//品牌数据
-		TdBrandSearchCriteria bsc = new TdBrandSearchCriteria();
+		/*TdBrandSearchCriteria bsc = new TdBrandSearchCriteria();
 		bsc.setFlag(false);
 		List<TdBrand> brandList = tdBrandService.findBySearchCriteria(bsc);
-		map.addAttribute("brandList", brandList);
-		return "/client/user/productform";	
+		map.addAttribute("brandList", brandList);*/
+		if(product.getKind().equals(Byte.valueOf("5"))){
+			return "/client/user/auctionproductform";	
+		}else{
+			return "/client/user/productform";	
+		}
 	}
 	
 	@RequestMapping("/producttypeattributes")

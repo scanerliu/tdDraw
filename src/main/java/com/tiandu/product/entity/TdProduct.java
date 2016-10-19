@@ -66,6 +66,10 @@ public class TdProduct {
 	private Date startTime;
 
 	private Date endTime;
+	
+	private BigDecimal bond;//保证金
+	private BigDecimal basePrice;//保底价
+	private BigDecimal currPrice;//当前价
 
 	/**
 	 * 商品的货品集合
@@ -281,6 +285,30 @@ public class TdProduct {
 
 	public void setLowPrice(BigDecimal lowPrice) {
 		this.lowPrice = lowPrice;
+	}
+
+	public BigDecimal getBond() {
+		return bond;
+	}
+
+	public void setBond(BigDecimal bond) {
+		this.bond = bond;
+	}
+
+	public BigDecimal getBasePrice() {
+		return basePrice;
+	}
+
+	public void setBasePrice(BigDecimal basePrice) {
+		this.basePrice = basePrice;
+	}
+
+	public BigDecimal getCurrPrice() {
+		return currPrice;
+	}
+
+	public void setCurrPrice(BigDecimal currPrice) {
+		this.currPrice = currPrice;
 	}
 
 	public void setCreateTime(Date createTime) {

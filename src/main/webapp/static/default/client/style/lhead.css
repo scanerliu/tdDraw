@@ -273,6 +273,10 @@
     display: block;
     padding: 0 23px;
 }
+.nav_div a:HOVER {
+    color: #fff;
+    background-color: #ffc001;
+}
 
 .innerf {
     margin-top: 40px;

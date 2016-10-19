@@ -299,7 +299,11 @@ public class CProductController extends BaseController {
 		map.addAttribute("productjson", productjson);
 		map.addAttribute("attachmentList", attachmentList);
 		map.addAttribute("system", getSystem());
-		return "/client/product/productdetail";
+		if(ConstantsUtils.PRODUCT_KIND_PRESALE.equals(product.getKind())){
+			return "/client/product/auctionproductdetail";
+		}else{
+			return "/client/product/productdetail";
+		}
 	}
 	/*
 	 * 商品图文详情页
@@ -495,6 +499,29 @@ public class CProductController extends BaseController {
 		map.addAttribute("productList", tdProductService.findBySearchCriteria(sc));
 		map.addAttribute("sc", sc);
 		return "/client/product/killlistbody";
+	}
+	
+	/*
+	 * 拍卖列表页
+	 */
+	@RequestMapping("/auctionlist")
+	public String auctionlist(TdProductCriteria sc, HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) {
+		modelMap.addAttribute("system", this.getSystem());
+		return "/client/product/auctionlist";
+	}
+	/*
+	 * 新品列表数据页
+	 */
+	@RequestMapping("/auctionsearch")
+	public String auctionsearch(TdProductCriteria sc,HttpServletRequest req,ModelMap map)
+	{
+		sc.setKind(ConstantsUtils.PRODUCT_KIND_PRESALE);
+		sc.setStatus(Byte.valueOf("1"));
+		sc.setOnshelf(true);
+		sc.setPageSize(12);
+		map.addAttribute("productList", tdProductService.findBySearchCriteria(sc));
+		map.addAttribute("sc", sc);
+		return "/client/product/auctionlistbody";
 	}
 
 }

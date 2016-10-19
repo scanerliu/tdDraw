@@ -94,3 +94,20 @@ function selectkillTab(id){
 		searchKillProducts(true);
 	});
 }
+
+//查询拍卖商品列表
+function searchAuctionProducts(flag){
+	var url = basePath + "/product/auctionsearch";
+	var loadData = "";
+	if(flag){
+		loadData = $("#searchform").serializeArray();
+	}else{
+		loadData = $("#listform").serializeArray();
+	}
+	$("#results").loading().load(url,loadData);
+}
+
+//零元购分页函数
+function fnGotoPageAuctionProducts(num){
+	searchAuctionProducts(false);
+}

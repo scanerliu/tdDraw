@@ -37,7 +37,7 @@ public class TdProduct {
 	
 	private Boolean onshelf = false;
 
-	private Byte status = 1;
+	private Byte status;
 
 	private String keyword;
 

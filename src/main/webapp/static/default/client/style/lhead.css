@@ -385,3 +385,16 @@
 .under_div .p1 .a1 {
     border: none;
 }
+
+.pabtn{
+	display: block;
+    width: 70px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 10px;
+    color: #fff;
+    border-radius: 6px;
+    background: #ffc671;
+}

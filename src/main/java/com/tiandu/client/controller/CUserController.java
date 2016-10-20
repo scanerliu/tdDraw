@@ -1178,6 +1178,31 @@ public class CUserController extends BaseController {
 	}
 	
 	/*
+	 * 查看我的商品
+	 */
+	@RequestMapping("/auctionproduct")
+	public String lookauctionproduct(Integer op, Integer type, HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) {
+		modelMap.addAttribute("system", getSystem());
+		modelMap.addAttribute("op", op);
+		modelMap.addAttribute("type", type);		
+		return "/client/user/auctionproductList";	
+	}
+	
+	/*
+	 * 搜索我的商品
+	 */
+	@RequestMapping("/searchauctionproduct")
+	public String searchauctionproduct(TdProductCriteria sc, HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) {
+		TdUser currentUser = this.getCurrentUser();
+		sc.setUid(currentUser.getUid());
+		sc.setKind(ConstantsUtils.PRODUCT_KIND_PRESALE);
+		List<TdProduct> productList = tdProductService.findBySearchCriteria(sc);
+		modelMap.addAttribute("productList", productList);			
+		modelMap.addAttribute("sc", sc);
+		return "/client/user/auctionproductListBody";	
+	}
+	
+	/*
 	 * 查看供应商商品
 	 */
 	@RequestMapping("/supplierproduct")
@@ -1583,6 +1608,12 @@ public class CUserController extends BaseController {
 			
 			boolean isUpdate = false;
 			if(product.getId() != null){
+				TdProduct preproduct = tdProductService.findOne(product.getId());
+				if(null==preproduct||!preproduct.getUid().equals(currentUser.getUid())){
+					res.put("code", "0");
+					res.put("msg", "商品保存失败:商品未找到！");
+					return res;
+				}
 				isUpdate = true;
 			}
 			if(isUpdate){
@@ -1964,7 +1995,7 @@ public class CUserController extends BaseController {
 		List<TdProductType> productTypeList = tdProductTypeService.findAll(tsc);
 		map.addAttribute("productTypeList", productTypeList);*/
 		TdProduct product = null;
-		if(null != id && id != 0)
+		if(null != id && id > 0)
 		{
 			// 商品主要信息
 			product = tdProductService.findOne(id);
@@ -2017,7 +2048,9 @@ public class CUserController extends BaseController {
 		}else{
 			product = new TdProduct();
 			if(null!=ktype && ktype.equals(2)){
-				product.setKind(Byte.valueOf("5"));
+				product.setKind(ConstantsUtils.PRODUCT_KIND_PRESALE);
+			}else{
+				product.setKind(ConstantsUtils.PRODUCT_KIND_COMMON);
 			}
 			map.addAttribute("tdProduct", product);
 		}
@@ -2027,7 +2060,7 @@ public class CUserController extends BaseController {
 		bsc.setFlag(false);
 		List<TdBrand> brandList = tdBrandService.findBySearchCriteria(bsc);
 		map.addAttribute("brandList", brandList);*/
-		if(product.getKind().equals(Byte.valueOf("5"))){
+		if(product.getKind().equals(ConstantsUtils.PRODUCT_KIND_PRESALE)){
 			return "/client/user/auctionproductform";	
 		}else{
 			return "/client/user/productform";	

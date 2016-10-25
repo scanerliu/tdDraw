@@ -190,7 +190,7 @@ public class CProductController extends BaseController {
 	/*
 	 * 商品类型数据页
 	 */
-	/*@RequestMapping("/searchproducttype")
+	@RequestMapping("/searchproducttype")
 	public String searchproducttype(TdProductTypeCriteria sc,HttpServletRequest req,ModelMap map)
 	{
 		sc.setFlag(false);
@@ -198,8 +198,8 @@ public class CProductController extends BaseController {
 		map.addAttribute("producttypelist", tdProductTypeService.findAll(sc));
 		map.addAttribute("sc", sc);
 		return "/client/product/producttypelist";
-	}*/
-	@RequestMapping("/searchproducttype")
+	}
+	/*@RequestMapping("/searchproducttype")
 	public String searchproducttype(TdProductMenuSearchCriteria sc,HttpServletRequest req,ModelMap map)
 	{
 		sc.setFlag(false);
@@ -207,7 +207,7 @@ public class CProductController extends BaseController {
 		map.addAttribute("treeList", tdProductMenuService.findMenuTree(sc));
 		map.addAttribute("sc", sc);
 		return "/client/product/producttypelist";
-	}
+	}*/
 	/*
 	 * 商品品牌数据页
 	 */

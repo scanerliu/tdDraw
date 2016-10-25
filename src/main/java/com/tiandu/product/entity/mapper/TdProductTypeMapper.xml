@@ -176,10 +176,10 @@
     </if>
     <if test="orderBy != null" >
       	<if test="orderBy ==1">
-      		order by  sort desc
+      		order by  t.sort desc, t.id asc
       	</if>
       	<if  test="orderBy ==2">
-	      	order by sort asc
+	      	order by t.sort asc, t.id asc
       	</if>
      </if>
   </select>

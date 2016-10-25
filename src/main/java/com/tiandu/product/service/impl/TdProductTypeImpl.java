@@ -95,6 +95,7 @@ public class TdProductTypeImpl implements TdProductTypeService{
 //		TdProductTypeCriteria sc = new TdProductTypeCriteria();
 		sc.setFlag(false);
 		sc.setParentId(0);
+		sc.setOrderBy("2");
 		List<TdProductType> productList = this.findBySearchCriteria(sc);
 		
 		if(null != productList && productList.size() > 0)
@@ -106,7 +107,7 @@ public class TdProductTypeImpl implements TdProductTypeService{
 				List<TdProductType> secondList = this.findBySearchCriteria(sc);
 				if(null != secondList && secondList.size() > 0)
 				{
-					for (TdProductType productType : secondList) 
+					/*for (TdProductType productType : secondList) 
 					{
 						// 查找三级分类
 						sc.setParentId(productType.getId());
@@ -115,7 +116,7 @@ public class TdProductTypeImpl implements TdProductTypeService{
 						{
 							productType.setSubList(thirdList);
 						}
-					}
+					}*/
 				}
 				tdProductType.setSubList(secondList);
 			}

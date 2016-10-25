@@ -1,31 +1,20 @@
 <#import "/common/app.ftl" as app>
-<#if treeList??>
-	<#list treeList as menu>
-		<div class="item">
-			<a href="javascript:;" title="">${menu.name!''}</a>
-			<div class="childitem">
-				<#if menu.typeList??>
-				<#list menu.typeList as ptype>
-					<#if ptype.productType?? && ptype.productType.subList??>
-					<#list ptype.productType.subList as subptype>
-						<dl>
-							<dt><a href="javascript:;" title="${subptype.name!''}">${subptype.name!''}</a></dt>
-							<dd>
-								<#if subptype.subList??>
-								<#list subptype.subList as stype>
-									<a href="${app.basePath}/product/list?typeId=${stype.id}" target="_blank">${stype.name!''}</a>
-								</#list>
-								</#if>
-							</dd>
-						</dl>
-					</#list>
-					</#if>
-				</#list>
-				</#if>
-			</div>
-		</div>
-    </#list>
-</#if>
+<div class="popmenu_bg" id="pm_02">
+	<div class="poptext">
+		<#if producttypelist??>
+		<#list producttypelist as ptype>
+	  	<h1><a href="${app.basePath}/product/list?typeId=${ptype.id}" target="_blank">${ptype.name!''}</a></h1>
+	  		<#if ptype.subList??>
+	  		<#assign ptn = 0>
+			<#list ptype.subList as subptype>
+			<#if ptn gt 0>|</#if><a href="${app.basePath}/product/list?typeId=${subptype.id}" target="_blank">${subptype.name!''}</a>
+			<#assign ptn++>
+			</#list>
+			</#if>
+		</#list>
+		</#if>
+	</div>
+</div>
 <script>
 	$(function(){
 		<#if sc.sctype?? && sc.sctype==2>
